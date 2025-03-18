@@ -5,15 +5,22 @@ There are 3 parts in the respository for the complete ***Weather Forecast Applic
 2. **WeatherForecast-UI** frontend of the application
 3. **Monitoring** configuration to monitor the application
 
-## Weather-App
-- Backend of the application is designed and developed using spring-boot **microservices architecture** and **DDD (Domain Driven Design) pattern**. The core of the application resides in Domain model. **Controllers** are placed in **primary adapters** and for external integration such as database, **secondary adapters** are used and thats where the code resides.
-- **AWS RDS MySQL** is used for storing the data. It has **3 tables** in it **WeatherLocation, DailyWeather and ExtendedForecast**. **WeatherLocation** table contains location information including zipcode, city and country. **DailyWeather** table contains daily weather information including the current temperature. **ExtendedForecast** table contains extended weather information for that particular location for the next 10 days that includes low and high temperature, wind speed, condition and precipitations.
-- The app has centralized error handling. It has specific errorhandlers and also a golbal exception handler. Error handling used spring boot **ControllerAdvice** annotation to keep the error handling capability centralized and not to clutter the code.
-- **Caffeine Cache** has been used to store the weather data in cache for about 30 minutes. After which it gets evicted from the cache
-- The app has been integrated with **Prometheus Metrics**. It exposes essential metrics for example that can be used to determine how many requests are incoming over a given period. This can be customized to expose metrics as needed by the app.
-- The app is integrated with **Swagger** to let consumers to know what API's are exposed. Currently it exposes 2 endpoints in a single **WeatherController**. First to get weatherforecast including dailyweather for the current temperature and extended forecast for the upcoming 10 days.
-- Health of the application can be determined with the **Actuator** integration
-- To start the spring boot app first run "**mvn clean install**". This will generate a jar in target directory of weather-app. Then run **java -jar weather-app.jar** to bring up the microservices via spring-boot to be consumed by front-end or any application that needs to read the weather data.
+## Weather-App (Backend)
+- The application's backend is designed and developed using a **Spring-Boot microservices architecture** and the **Domain-Driven Design (DDD) pattern**. The core of the application is centered around the **Domain model**. **Controllers** are in the **primary adapters to handle incoming requests**, while **secondary adapters handle outgoing external integrations** such as the database repository.
+
+- For data storage, we use **AWS RDS**, which contains three tables: **WeatherLocation, DailyWeather, and ExtendedForecast**. The **WeatherLocation** table stores location information, including zip code, city, and country. The **DailyWeather** table holds daily weather data, such as the current temperature. Meanwhile, the **ExtendedForecast** table provides extended weather information for a particular location over the next 10 days, including low and high temperatures, wind speed, conditions, and precipitation.
+
+- The application features **centralized error handling**, which includes **specific error handlers** and a **global exception handler**. This error management utilizes the Spring-Boot **@ControllerAdvice** annotation to keep error handling **centralized** and **maintainable**.
+
+- Implemented **Caffeine Cache** to store weather data for approximately 30 minutes temporarily. After the expiry, the cache evicts the expired data.
+
+- Integrated the application with **Prometheus Metrics**, which exposes essential metrics, such as the number of incoming requests over a given period. **Prometheus** can be extended by **customizing to expose custom metrics** to meet the application's needs.
+
+- **Swagger** integration informs users about the **exposed weather-app APIs**. Currently, two endpoints are available within a single **WeatherController**. The first endpoint retrieves a weather forecast, including the current temperature and an extended forecast for the next 10 days.
+
+- **Actuator integration** with the Spring-Boot weather app **monitors the health** of the application.
+
+- To **start the Spring Boot application**, first run **`mvn clean install`**. This command generates a JAR file in the weather app's target directory. Next, execute **`java -jar weather-app.jar`** to launch the microservices via Spring Boot, making them accessible to the front-end or any application that needs to read the weather data.
 
 ### Links for the Weather-App
 1. **Swagger**: http://localhost:8080/swagger-ui/index.html
@@ -23,21 +30,23 @@ There are 3 parts in the respository for the complete ***Weather Forecast Applic
 5. **Prometheus**: http://localhost:8080/actuator/prometheus
 
 
-## WeatherForecast-UI
-- WeatherForecast UI is developed using React's component based architecture. 
-- The microservice accepts zipCode and displays the weather data for the given zipcode.
-- If the zipcode does not exists or if the zipcode exists and there is no weather data related to that it displays appropriate messages. 
-- To start the frontend run the command "**npm start**" form the weatherforecast-ui directory
+
+## WeatherForecast-UI (Frontend)
+- **WeatherForecast-UI** was developed using **React's component-based architecture**. 
+- The microservice accepts zip code and displays the weather data for the given zip code.
+- If the zip code does not exist or if it exists and there is no weather data related to it, it displays appropriate messages. 
+- **To start the frontend**, run the command "**npm start**" from the weatherforecast-ui directory
 
 ### Links for the WeatherForecast-UI
 1. **Frontend** is accessible via http://localhost:3000/
 
 
+
 ## Monitoring
-- Monitoring for the weather app is built using **Prometheus** and **Grafana**. 
-- **Prometheus** for **monitoring and alerting**. It **collects, stores, and analyzes metrics** that weatherapp application, services exposes. It offers insights into performance and system health.
-- **Grafana** for **data visualization, monitoring, and troubleshooting**. The visualization is based and integrated with the data collected from weather-app via prometheus.
-The monitoring application is written using docker scripting file **docker-compose.yml**. The application can be brought up using "**docker-compose up**" cli.
+- **Monitoring** for the weather app is built using **Prometheus** and **Grafana**. 
+- **Prometheus** is for **monitoring and alerting**. It **collects, stores, and analyzes metrics** that the weather app application and services expose. It offers insights into **performance and system health**.
+- **Grafana** for **data visualization, monitoring, and troubleshooting**. The visualization is based on and integrated with the data collected from the weather app via Prometheus.
+- The **Docker** script **docker-compose.yml** composes and creates the monitoring application that directs **what ports Prometheus should monitor** and how and on **which port Grafana visualized**. It can be brought up using the "**docker-compose up**" cli.
 
 ### Links for the Monitoring
 1. **Prometheus** is accessible via http://localhost:9090
